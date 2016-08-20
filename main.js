@@ -41,7 +41,7 @@ app.get('/employ', function(req, res){
  *   latitude : LATITUDE,
  *   longitude : LONGITUDE
  * }
- * 
+ *
 */
 app.get('/position', function(req, res){
   var q = req.query;
@@ -67,10 +67,20 @@ app.get('/position', function(req, res){
       new_mesh.owner = player.id;
     }
     //IMPLEMENT FUNCTION CREATES RESPONCE
+    var resdata = {
+      lord_id : 0,
+      own_mesh : [],
+      own_people : 0,
+      people : 0,
+      area : [],
+      nation_id : 0
+    }
+    res.send(resdata);
   });
 
   res.status(200).send("Accepted");
 });
+
 
 var server = app.listen(3000, function () {
   var host = server.address().address;
