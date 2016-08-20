@@ -1,16 +1,27 @@
+var url = require('./lib/url.js')
 var request = require('request');
 var mongoose = require('mongoose');
 var app = require('express')();
 
 var db = mongoose.connect('mongodb://localhost/player');
 
+var MeshSchema = new mongoose.Schema({
+  meshcode : Number,
+  nation : Number,
+  owner : Number
+});
+mongoose.model('Mesh', MeshSchema);
+var Mesh = mongoose.model('Mesh');
+
 var PlayerSchema = new  mongoose.Schema({
-  id : String,
-  nation : String,
-  lord : String,
+  id : Number,
+  nation : Number,
+  lord : Number,
   ownmesh : [Number],
   people : Number
 });
+mongoose.model('Player', PlayerSchema);
+var Player = mongoose.model('Player');
 
 
 app.get('/', function(req, res){
@@ -18,6 +29,10 @@ app.get('/', function(req, res){
   res.send('Hello world');
 });
 app.get('/employ', function(req, res){
+  var q = req.query;
+  var player = new Player();
+  var mesh = url.calcMesh(q.latitude, q.longitude);
+
 });
 
 /*
@@ -30,10 +45,30 @@ app.get('/employ', function(req, res){
 */
 app.get('/position', function(req, res){
   var q = req.query;
+  var mesh_code = url.calcMesh(q.latitude, q.longitude);
   if(!(q.id && q.latitude && q.longitude)){
-    res.status(400).send();
+    res.status(400).send("Bad Request");
   }
-  console.log(req.query);
+
+  Player.findOne({id: q.id}, function(err, player){
+    if(err || player == null){
+      console.log("No player");
+      return;
+    }
+    Mesh.findOne({meshcode:mesh_code}, function(err, mesh){
+      if(err){
+        console.log("No mesh");
+        return;
+      }else if(mesh == null){
+        var new_mesh = new Mesh();
+        new_mesh.meshcode = mesh_code;
+      }
+      new_mesh.nation = player.nation;
+      new_mesh.owner = player.id;
+    }
+  });
+
+  res.status(200).send("Accepted");
 });
 
 var server = app.listen(3000, function () {
