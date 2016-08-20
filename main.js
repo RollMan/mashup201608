@@ -66,6 +66,7 @@ app.get('/position', function(req, res){
       new_mesh.nation = player.nation;
       new_mesh.owner = player.id;
     }
+    //IMPLEMENT FUNCTION CREATES RESPONCE
   });
 
   res.status(200).send("Accepted");
