@@ -1,0 +1,20 @@
+{
+    "nation_id": 3, 
+    "own_area": [
+        {
+            "latitude": 37.5166666666, 
+            "longitude": 139.9375
+        }, 
+        {
+            "latitude": 37.508814, 
+            "longitude": 139.930164
+        }, 
+        {
+            "latitude": 37.4870527, 
+            "longitude": 139.9359881
+        }
+    ], 
+    "own_mesh": [], 
+    "own_people": null, 
+    "people": null
+}
